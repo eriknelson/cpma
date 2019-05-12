@@ -67,6 +67,7 @@ func TestOAuthExtractionTransform(t *testing.T) {
 		IdentityProviders: loadTestIdentityProviders(),
 	}
 
+	// Run the transform in the background
 	go func() {
 		transformOutput, err := testExtraction.Transform()
 		if err != nil {
@@ -75,6 +76,7 @@ func TestOAuthExtractionTransform(t *testing.T) {
 		transformOutput.Flush()
 	}()
 
+	// Wait to hear back from flush over the channel
 	actualManifests := <-actualManifestsChan
 	t.Logf("Got actualManifests: %v", actualManifests)
 
