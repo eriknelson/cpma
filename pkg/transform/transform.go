@@ -123,10 +123,14 @@ type TransformOutput interface {
 	Flush() error
 }
 
-func (m ManifestTransformOutput) Flush() error {
-	logrus.Info("Writing file data:")
-	DumpManifests(m.Manifests)
+var manifestTransformOutputFlush = func(manifests []Manifest) error {
+	logrus.Info("Flushing manifests to disk")
+	DumpManifests(manifests)
 	return nil
+}
+
+func (m ManifestTransformOutput) Flush() error {
+	return manifestTransformOutputFlush(m.Manifests)
 }
 
 func (r TransformRunner) Transform(transforms []Transform) error {
